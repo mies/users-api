@@ -40,38 +40,42 @@ async fn main() {
 
 #[autometrics(objective = API_SLO)]
 async fn get_all_users() -> impl IntoResponse {
+    // fetch all the users
+    // for now we just return an empty array
     vec![]
 }
 
 #[autometrics(objective = API_SLO)]
-async fn get_user_by_id(Path(id): Path<i64>) -> impl IntoResponse {
-    // Find user by id
+async fn get_user_by_id(Path(_id): Path<i64>) -> impl IntoResponse {
+    // Find user by id and return object
+    // For now we just create a User object and return it as JSON
     let user = User {
         name: "foo".to_string(),
         email: "foo@bar.xyz".to_string(),
     };
-    // do something with User object
 
-    user
+    (StatusCode::OK, Json(user))
 }
 
 #[autometrics(objective = API_SLO)]
-async fn create_user(Json(user): Json<User>) -> User {
+async fn create_user(Json(user): Json<User>) -> impl IntoResponse {
     let user = User {
         name: user.name,
         email: user.email,
     };
     // do something with User object
 
-    user
+    (StatusCode::CREATED, Json(user))
 }
 
 #[autometrics(objective = API_SLO)]
-async fn update_user(Path(id): Path<i64>) -> i64 {
-    0
+async fn update_user(Path(_id): Path<i64>) -> impl IntoResponse {
+    // update user based on id
+    StatusCode::OK
 }
 
 #[autometrics(objective = API_SLO)]
-async fn delete_user(Path(id): Path<i64>) -> i64 {
-    0
+async fn delete_user(Path(_id): Path<i64>) -> impl IntoResponse {
+    // delete user based on id
+    StatusCode::OK
 }
